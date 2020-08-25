@@ -1,0 +1,37 @@
+<h1>
+  Your data has been imported successfully
+</h1>
+%%[
+    /*Declare Variables*/
+    var @userdata
+    /*Get JSON  from url*/
+    Set @userdata = RequestParameter("userdata")
+]%%
+<script runat="server">
+  Platform.Load("Core","1.1.1");
+  try{
+    //Get JSON string retrived by AMPscript from URL parameter
+    var userdata= Variable.GetValue("@userdata");
+    //parse JSON
+    var users = Platform.Function.ParseJSON(userdata)
+    //Loop through JSON aray and insert every single user into DE
+    var userarray=[];
+    for (var i = 0; i < users.length; i++) {
+      //get single user
+      var user = users[i];
+      //Create user array for insert function
+      userarray.push(user['First Name']);
+      userarray.push(user['Last Name']);
+      userarray.push(user['Email']);
+      //Insert data into DE
+      var rowcount = Platform.Function.InsertData("UserDE",["FirstName","LastName","Email"],userarray);
+      //reset userarray for new user
+      userarray.length=0;
+    }
+  }
+  //end try
+  catch(e){
+    Write(Stringify(e));
+  }
+  //End catch
+</script>
