@@ -1,6 +1,6 @@
 # Import-CSV-to-dataextension-from-a-cloudpage
 
-This code is to upload a csv from a cloud page and insert the data into data extension.
+This code is to upload a csv from a cloud page and insert the data into data extension. Your CSV should have headers for mapping.
 
 1st cloud page (Read CSV file) will read the csv file uploaded and pos the data as JSON to second page
 
