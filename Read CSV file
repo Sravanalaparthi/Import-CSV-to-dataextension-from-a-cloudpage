@@ -1,0 +1,48 @@
+<input type="file">
+<!--Change the action attribute to the cloud page where your insert logic exists -->
+<form name="myform" action="https://fe3d11717d64047c751473.pub.s7.sfmc-content.com/mqknnomyfba" method="post">
+  <input type="hidden" id="userdata" value="" name="userdata">
+</form>
+<script>
+  function ReadCSVFunction(file, delimiter, callback) {
+    var reader = new FileReader();
+    // after the file reader had loaded the file
+    reader.onload = function() {
+      callback(this.result);
+    }
+    // Read the file content as a single string
+    reader.readAsText(file);
+  }
+  //var csv is the CSV file with headers
+  function CSVtoJSONFunction(csv){
+    //Split string at new line charecters
+    //new line charecter may vary
+    var lines=csv.split("\r\n");
+    //convert string to JSON
+    var result = [];
+    var headers=lines[0].split(",");
+    for(var i=1;i<lines.length;i++){
+      var obj = {
+      };
+      var currentline=lines[i].split(",");
+      for(var j=0;j<headers.length;j++){
+        obj[headers[j]] = currentline[j];
+      }
+      result.push(obj);
+    }
+    //Write JSON to hideen input and submit form
+    document.getElementById("userdata").value =JSON.stringify(result);
+    document.myform.submit();
+  }
+  //add listner to input file
+  document.querySelector('input[type="file"]')
+    .addEventListener('change', function() {
+    var files = this.files;
+    for (var i = 0; i < files.length; i++) {
+      ReadCSVFunction(files[i], ',', function(result) {
+        CSVtoJSONFunction(result.toString());
+      });
+    }
+  }
+                     )
+</script>
